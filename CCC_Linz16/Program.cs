@@ -11,12 +11,13 @@ namespace CCC_Linz16
     {
         static ContestTcpConnection tcp;
         static InitVal iniObj;
+        
 
         static void Main(string[] args)
         {
             try
             {
-            tcp = new ContestTcpConnection(7000, 1, 3);
+            tcp = new ContestTcpConnection(7000, 2, 3);
             tcp.Connect();
             
             Thread.Sleep(100);
@@ -24,17 +25,49 @@ namespace CCC_Linz16
             string vals = tcp.Read();
             iniObj = parseInput(vals.Split('\n'));
             Console.WriteLine(iniObj.ToString());
-            
-            for (int i = 0; i <10; i++)
+
+            for (int n = 0; n < iniObj.dronesNum; n++) print(status(n));
+          
+            for (int i = 0; i <2; i++)
             {
-                    //Console.WriteLine(throttle(0, 0.7));
-                    //if (i > 5) Console.WriteLine(throttle(0, 0.6));
-                    //else Console.WriteLine(throttle(0, Math.Cos(i/20f)-0.4));
-                    Console.WriteLine(throttle(0, 0.7 - (i / 30f)));
-                    //Console.WriteLine(throttle(0, i % 2 == 0 ? 0.7 : 0.5-(i/30f)));
-                Console.WriteLine(tick(1));
-                Console.WriteLine(status(0));
-                Thread.Sleep(500);
+
+                tstep8(13);
+                tstep8(0);
+                tstep8(0);
+                tstep(0);
+                tstep(0);
+                tstep8(-(13 - (2 * grav)));
+
+                // hold
+                for (int j = 0; j < 20; j++)
+                {
+                    tstep8(0);
+                }
+                double h = 35.58004;
+
+                tstep8(-0.1);
+                    // fall slow
+                    for (int j = 0; j < h/0.1-2; j++)
+                    {
+                        tstep8(0);
+                    }
+                    tstep8(0.1);
+                    tstep8(0);
+                    tstep8(0);
+                    tstep8(0);
+
+                    for (int ii = 0; ii < 20; ii++)
+                        print(throttle(ii, 0));
+
+                    for (int ii = 0; ii < 20; ii++)
+                        land(ii);
+
+
+                    print(tick(1));
+                    print(status(0));
+
+
+                    Thread.Sleep(500);
             }
 
             tcp.StartConsole();
@@ -45,9 +78,35 @@ namespace CCC_Linz16
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return;
             }
-            Console.Read();
+            Console.ReadLine();
+        }
+
+        static void tstep(double val)
+        {
+            for (int i = 0; i < 20; i++)
+            print(throttle(i, val));
+
+            print(tick(1));
+            //print(status(0));
+        }
+        static void tstep8(double val)
+        {
+            for (int i = 0; i < 20; i++)
+                print(throttle(i, throttle8(val)));
+
+            print(tick(1));
+            //print(status(0));
+        }
+
+        static void wait()
+        {
+            Console.ReadLine();
+        }
+
+        static void print(object str)
+        {
+            Console.WriteLine(str.ToString());
         }
 
     }

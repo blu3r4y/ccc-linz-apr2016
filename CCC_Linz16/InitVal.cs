@@ -7,9 +7,9 @@ namespace CCC_Linz16
         public Point<double> min;
         public Point<double> max;
 
-        int dronesNum;
+        public int dronesNum;
 
-        double height;
+        public double height;
 
         public InitVal()
         {
