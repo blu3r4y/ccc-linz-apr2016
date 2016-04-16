@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -7,32 +8,37 @@ using BlueLib.Network;
 
 namespace CCC_Linz16
 {
-    partial class Program
+    static partial class Program
     {
-        static ContestTcpConnection tcp;
-        static InitVal iniObj;
+        public static ContestTcpConnection tcp;
+        static Map map;
         
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             try
             {
-            tcp = new ContestTcpConnection(7000, 2, 3);
+            tcp = new ContestTcpConnection(7000, 3, 1);
             tcp.Connect();
             
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
+
 
             string vals = tcp.Read();
-            iniObj = parseInput(vals.Split('\n'));
-            Console.WriteLine(iniObj.ToString());
-
-            for (int n = 0; n < iniObj.dronesNum; n++) print(status(n));
-          
+            map = new Map(vals.Split('\n'));
+            Console.WriteLine(map.ToString());
+                Console.ReadLine();
+                map.drones[0].moveToLinear(map.drones[0].target);
+                wait();
             for (int i = 0; i <2; i++)
             {
 
-                tstep8(13);
-                tstep8(0);
+                tstep8(0.1);
+                tstep8(-0.1);
+                    tstep8(0.1);
+                    tstep8(-0.1);
+
+                    tstep8(-5);
                 tstep8(0);
                 tstep(0);
                 tstep(0);
@@ -75,36 +81,34 @@ namespace CCC_Linz16
                 
 
             }
-            catch (Exception e)
+            catch (IOException e)
             {
                 Console.WriteLine(e);
             }
             Console.ReadLine();
         }
 
-        static void tstep(double val)
+        public static void tstep(double val)
         {
-            for (int i = 0; i < 20; i++)
-            print(throttle(i, val));
+            print(throttle(0, val));
 
             print(tick(1));
-            //print(status(0));
+            print(status(0));
         }
-        static void tstep8(double val)
+        public static void tstep8(double val)
         {
-            for (int i = 0; i < 20; i++)
-                print(throttle(i, throttle8(val)));
+                print(throttle(0, throttle8(val)));
 
             print(tick(1));
-            //print(status(0));
+            print(status(0));
         }
 
-        static void wait()
+        public static void wait()
         {
             Console.ReadLine();
         }
 
-        static void print(object str)
+        public static void print(object str)
         {
             Console.WriteLine(str.ToString());
         }

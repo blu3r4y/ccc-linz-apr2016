@@ -41,11 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Drone.cs" />
     <Compile Include="Util.cs" />
-    <Compile Include="InitVal.cs" />
+    <Compile Include="Map.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vec.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Common\Workspace\Visual Studio\BlueLib\BlueLib_40\BlueLib_40.csproj">
